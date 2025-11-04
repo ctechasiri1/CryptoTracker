@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var showPorfolio: Bool = false
+    @EnvironmentObject private var viewModel: HomeViewModel
+    @State private var showPortfolio: Bool = false
     
     var body: some View {
         ZStack {
@@ -16,7 +17,19 @@ struct HomeView: View {
                 .ignoresSafeArea()
             
             VStack {
-                CustomNavigationHeader(showPorfolio: $showPorfolio)
+                CustomNavigationHeader(showPorfolio: $showPortfolio)
+                
+                ListTitle(showPortfolio: $showPortfolio)
+                
+                if !showPortfolio {
+                    AllCoinsList()
+                        .transition(.move(edge: .leading))
+                }
+                
+                if showPortfolio {
+                    PortfolioCoinsList()
+                        .transition(.move(edge: .trailing))
+                }
                 
                 Spacer()
             }
@@ -29,9 +42,10 @@ struct HomeView: View {
         HomeView()
             .toolbar(.hidden, for: .navigationBar)
     }
+    .environmentObject(HomeViewModel())
 }
 
-// MARK: Navigation
+// MARK: Navigation Bar
 private struct CustomNavigationHeader: View {
     @Binding var showPorfolio: Bool
     
@@ -54,9 +68,64 @@ private struct CustomNavigationHeader: View {
                 .rotationEffect(Angle(degrees: showPorfolio ? 180 : 0))
                 .animation(.bouncy(duration: 1.5), value: showPorfolio)
                 .onTapGesture {
-                    showPorfolio.toggle()
+                    withAnimation {
+                        showPorfolio.toggle()
+                    }
                 }
         }
         .padding(.horizontal)
+    }
+}
+
+// MARK: List Title
+private struct ListTitle: View {
+    @Binding var showPortfolio: Bool
+    
+    var body: some View {
+        HStack {
+            Text("Coin")
+            
+            Spacer()
+            
+            if showPortfolio {
+                Text("Holdings")
+                    .padding(.leading)
+                    .transition(.scale)
+            }
+            
+            Text("Price")
+                .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
+        }
+        .padding(.horizontal)
+        .foregroundStyle(Color.theme.secondaryText)
+        .font(.caption)
+    }
+}
+
+// MARK: All Coins List
+private struct AllCoinsList: View {
+    @EnvironmentObject private var viewModel: HomeViewModel
+    
+    var body: some View {
+        List {
+            ForEach(viewModel.allCoins) { coin in
+                CoinRowView(coin: coin, showHoldingsColumn: false)
+            }
+        }
+        .listStyle(PlainListStyle())
+    }
+}
+
+// MARK: Portfolio Coins List
+private struct PortfolioCoinsList: View {
+    @EnvironmentObject private var viewModel: HomeViewModel
+    
+    var body: some View {
+        List {
+            ForEach(viewModel.porfolioCoins) { coin in
+                CoinRowView(coin: coin, showHoldingsColumn: true)
+            }
+        }
+        .listStyle(PlainListStyle())
     }
 }
