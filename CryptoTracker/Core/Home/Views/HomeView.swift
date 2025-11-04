@@ -24,7 +24,14 @@ struct HomeView: View {
     }
 }
 
-// MARK: Header
+#Preview {
+    NavigationView {
+        HomeView()
+            .toolbar(.hidden, for: .navigationBar)
+    }
+}
+
+// MARK: Navigation
 private struct CustomNavigationHeader: View {
     @Binding var showPorfolio: Bool
     
@@ -51,12 +58,5 @@ private struct CustomNavigationHeader: View {
                 }
         }
         .padding(.horizontal)
-    }
-}
-
-#Preview {
-    NavigationView {
-        HomeView()
-            .toolbar(.hidden, for: .navigationBar)
     }
 }
