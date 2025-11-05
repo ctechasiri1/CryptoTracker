@@ -25,15 +25,8 @@ class HomeViewModel: ObservableObject {
             await MainActor.run {
                 self.allCoins = coins
             }
-        } catch (NetworkingErrors.badURl) {
-            print("Networking Error: Bad URL")
-        } catch (NetworkingErrors.cannotDecodeContentData) {
-            print("Networking Error: Cannot Decode Content Data")
-        } catch (NetworkingErrors.badServerResponse) {
-            print("Networking Error: Bad Server Response")
-        }
-        catch let error {
-            print(error.localizedDescription)
+        } catch {
+            print("There was a failure calling the API.")
         }
     }
 }
