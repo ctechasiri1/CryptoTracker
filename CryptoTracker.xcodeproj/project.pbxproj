@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		51F7E8192EBA7AA7003CFA74 /* ConfidentialKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51F7E8182EBA7AA7003CFA74 /* ConfidentialKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		51F7E7DC2EB92ED0003CFA74 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51F7E8192EBA7AA7003CFA74 /* ConfidentialKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,12 +111,14 @@
 			buildRules = (
 			);
 			dependencies = (
+				51F7E81C2EBA7AD3003CFA74 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				51F7E7D02EB92ECE003CFA74 /* CryptoTracker */,
 			);
 			name = CryptoTracker;
 			packageProductDependencies = (
+				51F7E8182EBA7AA7003CFA74 /* ConfidentialKit */,
 			);
 			productName = CryptoTracker;
 			productReference = 51F7E7CE2EB92ECE003CFA74 /* CryptoTracker.app */;
@@ -195,6 +202,10 @@
 			);
 			mainGroup = 51F7E7C52EB92ECE003CFA74;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				51F7E8172EBA7AA7003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential" */,
+				51F7E81A2EBA7AB2003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 51F7E7CF2EB92ECE003CFA74 /* Products */;
 			projectDirPath = "";
@@ -265,6 +276,10 @@
 			isa = PBXTargetDependency;
 			target = 51F7E7CD2EB92ECE003CFA74 /* CryptoTracker */;
 			targetProxy = 51F7E7E62EB92ED0003CFA74 /* PBXContainerItemProxy */;
+		};
+		51F7E81C2EBA7AD3003CFA74 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 51F7E81B2EBA7AD3003CFA74 /* Confidential */;
 		};
 /* End PBXTargetDependency section */
 
@@ -572,6 +587,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		51F7E8172EBA7AA7003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/securevale/swift-confidential.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.2;
+			};
+		};
+		51F7E81A2EBA7AB2003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/securevale/swift-confidential-plugin.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		51F7E8182EBA7AA7003CFA74 /* ConfidentialKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 51F7E8172EBA7AA7003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential" */;
+			productName = ConfidentialKit;
+		};
+		51F7E81B2EBA7AD3003CFA74 /* Confidential */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 51F7E81A2EBA7AB2003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */;
+			productName = "plugin:Confidential";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 51F7E7C62EB92ECE003CFA74 /* Project object */;
 }
