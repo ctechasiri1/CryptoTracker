@@ -21,6 +21,8 @@ struct HomeView: View {
                 
                 ListTitle(showPortfolio: $showPortfolio)
                 
+                SearchBarView()
+                
                 if !showPortfolio {
                     AllCoinsList()
                         .transition(.move(edge: .leading))
@@ -33,9 +35,9 @@ struct HomeView: View {
                 
                 Spacer()
             }
-            .task {
-                await viewModel.fetchCoins()
-            }
+//            .task {
+//                await viewModel.fetchCoins()
+//            }
         }
     }
 }

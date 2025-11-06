@@ -11,6 +11,7 @@ import Foundation
 class HomeViewModel: ObservableObject {
     @Published var allCoins = [Coin]()
     @Published var porfolioCoins = [Coin]()
+    @Published var searchText: String = ""
     
     private let dataService = CoinDataService()
     
