@@ -10,11 +10,12 @@ import Foundation
 import UIKit
 
 final class CoinDataService {
-    private let apiURL =  "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=smart-contract-platform&price_change_percentage=24h&include_tokens=top&order=market_cap_desc&per_page=250&page=1&sparkline=true&precision=2" + "?x_cg_demo_api_key=" + "\(Secrets.CoinGeckoAPIKey)"
+    private let urlPath =  "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=smart-contract-platform&price_change_percentage=24h&include_tokens=top&order=market_cap_desc&per_page=250&page=1&sparkline=true&precision=2"
     
     func getCoinsFromURL() async throws -> [Coin] {
+        let apiPathWithKey = urlPath + "?x_cg_demo_api_key=" + "\(Secrets.CoinGeckoAPIKey)"
         do {
-            let coins: [Coin] = try await NetworkingManager.downloadFromURL(urlString: apiURL)
+            let coins: [Coin] = try await NetworkingManager.downloadFromURL(urlString: apiPathWithKey)
             
             return coins
         } catch {

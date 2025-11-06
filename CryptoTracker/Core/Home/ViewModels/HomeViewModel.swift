@@ -14,12 +14,6 @@ class HomeViewModel: ObservableObject {
     
     private let dataService = CoinDataService()
     
-    init() {
-        Task {
-            await fetchCoins()
-        }
-    }
-    
     func fetchCoins() async {
         do {
             let coins = try await dataService.getCoinsFromURL()
