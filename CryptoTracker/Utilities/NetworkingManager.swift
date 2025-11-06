@@ -8,7 +8,7 @@
 import Foundation
 
 class NetworkingManager {
-    static func downloadFromURL(urlString: String) async throws -> Data {
+    static func downloadFromURL<T:Decodable>(urlString: String) async throws -> [T] {
         guard let url = URL(string: urlString) else {
             throw NetworkingError.badURL
         }
@@ -21,6 +21,11 @@ class NetworkingManager {
             }
         }
         
-        return data
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let decodedData = try decoder.decode([T].self, from: data)
+        
+        return decodedData
     }
 }

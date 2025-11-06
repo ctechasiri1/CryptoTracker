@@ -27,7 +27,7 @@ class HomeViewModel: ObservableObject {
                 self.allCoins = coins
             }
         } catch {
-            print("There was a failure calling the API.")
+            print(error)
         }
     }
 }
