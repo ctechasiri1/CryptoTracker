@@ -15,13 +15,14 @@ class HomeViewModel: ObservableObject {
     private let dataService = CoinDataService()
     
     init() {
-        allCoins.append(Coin.mockCoin)
-        porfolioCoins.append(Coin.mockCoin)
+        Task {
+            await fetchCoins()
+        }
     }
     
     func fetchCoins() async {
         do {
-            let coins = try await dataService.getCoins()
+            let coins = try await dataService.getCoinsFromURL()
             await MainActor.run {
                 self.allCoins = coins
             }

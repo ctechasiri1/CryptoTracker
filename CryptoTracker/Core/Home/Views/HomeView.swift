@@ -34,9 +34,6 @@ struct HomeView: View {
                 Spacer()
             }
         }
-//        .task {
-//            await viewModel.fetchCoins()
-//        }
     }
 }
 
