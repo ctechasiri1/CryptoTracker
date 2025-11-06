@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		514E63762EBD47C7001F5F51 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 514E63752EBD47C7001F5F51 /* SDWebImage */; };
 		51F7E8192EBA7AA7003CFA74 /* ConfidentialKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51F7E8182EBA7AA7003CFA74 /* ConfidentialKit */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				514E63762EBD47C7001F5F51 /* SDWebImage in Frameworks */,
 				51F7E8192EBA7AA7003CFA74 /* ConfidentialKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -119,6 +121,7 @@
 			name = CryptoTracker;
 			packageProductDependencies = (
 				51F7E8182EBA7AA7003CFA74 /* ConfidentialKit */,
+				514E63752EBD47C7001F5F51 /* SDWebImage */,
 			);
 			productName = CryptoTracker;
 			productReference = 51F7E7CE2EB92ECE003CFA74 /* CryptoTracker.app */;
@@ -205,6 +208,7 @@
 			packageReferences = (
 				51F7E8172EBA7AA7003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential" */,
 				51F7E81A2EBA7AB2003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */,
+				514E63742EBD47C7001F5F51 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 51F7E7CF2EB92ECE003CFA74 /* Products */;
@@ -589,6 +593,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		514E63742EBD47C7001F5F51 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.21.3;
+			};
+		};
 		51F7E8172EBA7AA7003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/securevale/swift-confidential.git";
@@ -608,6 +620,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		514E63752EBD47C7001F5F51 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 514E63742EBD47C7001F5F51 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
 		51F7E8182EBA7AA7003CFA74 /* ConfidentialKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 51F7E8172EBA7AA7003CFA74 /* XCRemoteSwiftPackageReference "swift-confidential" */;
