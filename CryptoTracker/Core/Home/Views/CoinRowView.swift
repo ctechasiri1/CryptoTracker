@@ -41,7 +41,7 @@ private struct InfoColumn: View {
             .foregroundStyle(Color.theme.secondaryText)
             .frame(minWidth: 30)
         
-        AsyncImage(url: URL(string:coin.image)) { image in
+        CachedAsyncImage(url: URL(string:coin.image)!) { image in
             image.resizable()
         } placeholder: {
             ProgressView()
