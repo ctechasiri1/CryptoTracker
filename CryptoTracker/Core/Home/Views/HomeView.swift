@@ -21,7 +21,7 @@ struct HomeView: View {
                 
                 ListTitle(showPortfolio: $showPortfolio)
                 
-                SearchBarView()
+                SearchBarView(searchText: $viewModel.searchText)
                 
                 if !showPortfolio {
                     AllCoinsList()
@@ -113,7 +113,7 @@ private struct AllCoinsList: View {
     
     var body: some View {
         List {
-            ForEach(viewModel.allCoins) { coin in
+            ForEach(viewModel.filterdCoins(searchText: viewModel.searchText)) { coin in
                 CoinRowView(coin: coin, showHoldingsColumn: false)
             }
         }

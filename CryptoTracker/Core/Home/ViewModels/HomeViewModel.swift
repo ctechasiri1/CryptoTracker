@@ -15,6 +15,11 @@ class HomeViewModel: ObservableObject {
     
     private let dataService = CoinDataService()
     
+    init() {
+        allCoins.append(Coin.mockCoin)
+        porfolioCoins.append(Coin.mockCoin)
+    }
+    
     func fetchCoins() async {
         do {
             let coins = try await dataService.getCoinsFromURL()
@@ -24,5 +29,16 @@ class HomeViewModel: ObservableObject {
         } catch {
             print(error)
         }
+    }
+    
+    func clearTextField() {
+        searchText = ""
+    }
+    
+    func filterdCoins(searchText: String) -> [Coin] {
+        if searchText.isEmpty { return allCoins }
+        let filteredCoins = allCoins.filter({ $0.name.localizedCaseInsensitiveContains(searchText) || $0.symbol.localizedCaseInsensitiveContains(searchText) || $0.id.localizedCaseInsensitiveContains(searchText) })
+        
+        return filteredCoins
     }
 }

@@ -14,6 +14,7 @@ final class CoinDataService {
     
     func getCoinsFromURL() async throws -> [Coin] {
         let apiPathWithKey = urlPath + "?x_cg_demo_api_key=" + "\(Secrets.CoinGeckoAPIKey)"
+        
         do {
             let coins: [Coin] = try await NetworkingManager.downloadFromURL(urlString: apiPathWithKey)
             
