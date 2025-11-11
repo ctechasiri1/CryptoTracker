@@ -1,5 +1,5 @@
 //
-//  StatisticsView.swift
+//  StatisticView.swift
 //  CryptoTracker
 //
 //  Created by Chiraphat Techasiri on 11/7/25.
@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct StatisticsView: View {
+struct StatisticView: View {
     let stat: Statistics
     
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(alignment: .leading, spacing: 4) {
             Text(stat.title)
                 .font(.caption)
                 .foregroundStyle(Color.theme.secondaryText)
@@ -37,5 +37,5 @@ struct StatisticsView: View {
 }
 
 #Preview {
-    StatisticsView(stat: Statistics.mockTotalVolume)
+    StatisticView(stat: Statistics.mockTotalVolume)
 }

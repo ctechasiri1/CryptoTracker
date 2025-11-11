@@ -10,18 +10,24 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject private var viewModel: HomeViewModel
     @State private var showPortfolio: Bool = false
+    @State private var showPortfolioSheet: Bool = false
     
     var body: some View {
         ZStack {
             Color.theme.background
                 .ignoresSafeArea()
+                .sheet(isPresented: $showPortfolioSheet) {
+                    PortfolioView()
+                }
             
             VStack {
-                CustomNavigationHeader(showPorfolio: $showPortfolio)
+                CustomNavigationHeader(showPorfolio: $showPortfolio, showPortfolioSheet: $showPortfolioSheet)
+                
+                HomeStatisticView(showPortfolio: $showPortfolio)
+              
+                SearchBarView(searchText: $viewModel.searchText)
                 
                 ListTitle(showPortfolio: $showPortfolio)
-                
-                SearchBarView(searchText: $viewModel.searchText)
                 
                 if !showPortfolio {
                     AllCoinsList()
@@ -35,9 +41,10 @@ struct HomeView: View {
                 
                 Spacer()
             }
-//            .task {
+            .task {
 //                await viewModel.fetchCoins()
-//            }
+//                await viewModel.fetchMarketData()
+            }
         }
     }
 }
@@ -53,13 +60,20 @@ struct HomeView: View {
 // MARK: Navigation Bar
 private struct CustomNavigationHeader: View {
     @Binding var showPorfolio: Bool
+    @Binding var showPortfolioSheet: Bool
     
     var body: some View {
         HStack {
-            CircleButtonView(imageName: showPorfolio ? "plus" : "info")
-                .background(
-                    CircleButtonAnimationView(animate: showPorfolio)
-                )
+            Button {
+                if showPorfolio {
+                    showPortfolioSheet.toggle()
+                }
+            } label: {
+                CircleButtonView(imageName: showPorfolio ? "plus" : "info")
+                    .background(
+                        CircleButtonAnimationView(animate: showPorfolio)
+                    )
+            }
             
             Spacer()
             
@@ -134,3 +148,4 @@ private struct PortfolioCoinsList: View {
         .listStyle(PlainListStyle())
     }
 }
+

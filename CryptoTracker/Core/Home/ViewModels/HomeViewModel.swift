@@ -9,11 +9,15 @@ import Combine
 import Foundation
 
 class HomeViewModel: ObservableObject {
+    @Published var statsList = [Statistics]()
+    
     @Published var allCoins = [Coin]()
     @Published var porfolioCoins = [Coin]()
+    
     @Published var searchText: String = ""
     
-    private let dataService = CoinDataService()
+    private let coinDataService = CoinDataService()
+    private let marketDataService = MarketDataService()
     
     init() {
         allCoins.append(Coin.mockCoin)
@@ -22,9 +26,26 @@ class HomeViewModel: ObservableObject {
     
     func fetchCoins() async {
         do {
-            let coins = try await dataService.getCoinsFromURL()
+            let coins = try await coinDataService.getCoinsFromURL()
             await MainActor.run {
                 self.allCoins = coins
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func fetchMarketData() async {
+        do {
+            let marketData = try await marketDataService.getMarketDataFromURL()
+            
+            let marketCap = Statistics(title: "Market Cap", value: marketData.marketCap, percentChange: Double(marketData.marketCapPercentageInBTC))
+            let volume = Statistics(title: "24h Volume", value: marketData.volume)
+            let btcDominance = Statistics(title: "BTC Dominance", value: marketData.marketCapPercentageInBTC)
+            let portfolio = Statistics(title: "Porfolio Value", value: "$0.00", percentChange: 0)
+            
+            await MainActor.run {
+                statsList.append(contentsOf: [marketCap, volume, btcDominance, portfolio])
             }
         } catch {
             print(error)

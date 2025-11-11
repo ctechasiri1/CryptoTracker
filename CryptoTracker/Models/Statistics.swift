@@ -30,6 +30,6 @@ extension Statistics {
     }
     
     static var mockPortfolioValue: Statistics {
-        Statistics(title: "Portfolio Value", value: "$50.4K", percentChange: -12.34)
+        Statistics(title: "Portfolio Value", value: "$50.4K", percentChange: 12.53)
     }
 }
