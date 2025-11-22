@@ -41,10 +41,10 @@ struct HomeView: View {
                 
                 Spacer()
             }
-            .task {
+//            .task {
 //                await viewModel.fetchCoins()
 //                await viewModel.fetchMarketData()
-            }
+//            }
         }
     }
 }

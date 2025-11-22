@@ -19,7 +19,7 @@ struct PortfolioView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     SearchBarView(searchText: $viewModel.searchText)
                     
-                    CoinLogoList(selectedCoin: $selectedCoin, allCoins: viewModel.allCoins)
+                    CoinLogoList(selectedCoin: $selectedCoin, allCoins: viewModel.filterdCoins(searchText: viewModel.searchText))
                     
                     if let coin = selectedCoin {
                         PortfolioInputSection(quantityText: $quantityText, selectedCoin: coin)
@@ -32,11 +32,19 @@ struct PortfolioView: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    SaveButton(selectedCoin: $selectedCoin, showCheckmark: $showCheckmark, quantityText: $quantityText)
+                    SaveButton(selectedCoin: $selectedCoin, showCheckmark: $showCheckmark, quantityText: $quantityText) {
+                        
+                    }
                     .opacity(selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText) ? 1.0 : 0.0)
                 }
-                .sharedBackgroundVisibility(selectedCoin != nil ? .visible : .hidden)
+                .sharedBackgroundVisibility(selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText) ? .visible : .hidden)
             }
+            .onChange(of: viewModel.searchText, { oldValue, newValue in
+                if newValue == "" {
+                    viewModel.clearTextField()
+                    selectedCoin = nil
+                }
+            })
             .navigationTitle("Edit Portfolio")
         }
     }
@@ -132,10 +140,12 @@ private struct SaveButton: View {
     @Binding var selectedCoin: Coin?
     @Binding var showCheckmark: Bool
     @Binding var quantityText: String
+    var saveData: () -> Void
     
     var body: some View {
         Button {
             Task {
+                saveData()
                 await saveButtonPressed()
             }
         } label: {

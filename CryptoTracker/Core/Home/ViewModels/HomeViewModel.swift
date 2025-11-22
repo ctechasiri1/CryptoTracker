@@ -18,10 +18,13 @@ class HomeViewModel: ObservableObject {
     
     private let coinDataService = CoinDataService()
     private let marketDataService = MarketDataService()
+    private let portfolioDataService = PortfolioDataService()
+    private var cancellables = Set<AnyCancellable>()
     
-    init() {
-        allCoins.append(Coin.mockCoin)
-        porfolioCoins.append(Coin.mockCoin)
+    init() { }
+    
+    func addSubsribers() {
+        // need to implement this so it keeps track of the new coins in the portfolio
     }
     
     func fetchCoins() async {
