@@ -12,7 +12,7 @@ class HomeViewModel: ObservableObject {
     @Published var statsList = [Statistics]()
     
     @Published var allCoins = [Coin]()
-    @Published var porfolioCoins = [Coin]()
+    @Published var portfolioCoins = [Coin]()
     
     @Published var searchText: String = ""
     
@@ -21,10 +21,35 @@ class HomeViewModel: ObservableObject {
     private let portfolioDataService = PortfolioDataService()
     private var cancellables = Set<AnyCancellable>()
     
-    init() { }
+    init() {
+        addSubsribers()
+    }
     
     func addSubsribers() {
-        // need to implement this so it keeps track of the new coins in the portfolio
+//        $portfolioCoins
+//            .sink { newPortfolioCoins in
+//                for coin in newPortfolioCoins {
+//                    
+//                }
+//            }
+        
+        $allCoins
+            .combineLatest(portfolioDataService.$savedEntities)
+            .map { (coins, portfolioEntities) -> [Coin] in
+                coins
+                    .compactMap { (coin) -> Coin? in
+                        guard let entity = portfolioEntities.first(where: { $0.coinID == coin.id }) else { return nil }
+                        return coin.updateHoldings(amount: entity.amount)
+                    }
+            }
+            .sink { [weak self] returnedCoins in
+                self?.portfolioCoins = returnedCoins
+            }
+            .store(in: &cancellables)
+    }
+    
+    func updatePortfolio(coin: Coin, amount: Double) {
+        portfolioDataService.updatePortfolio(coin: coin, amount: amount)
     }
     
     func fetchCoins() async {

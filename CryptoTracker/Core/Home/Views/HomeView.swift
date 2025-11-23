@@ -19,32 +19,34 @@ struct HomeView: View {
                 .sheet(isPresented: $showPortfolioSheet) {
                     PortfolioView()
                 }
-            
+
             VStack {
                 CustomNavigationHeader(showPorfolio: $showPortfolio, showPortfolioSheet: $showPortfolioSheet)
                 
                 HomeStatisticView(showPortfolio: $showPortfolio)
-              
+                
                 SearchBarView(searchText: $viewModel.searchText)
                 
                 ListTitle(showPortfolio: $showPortfolio)
                 
                 if !showPortfolio {
-                    AllCoinsList()
+                    AllCoinsList(allCoins: viewModel.filterdCoins(searchText: viewModel.searchText)) {
+                        await viewModel.fetchCoins()
+                    }
                         .transition(.move(edge: .leading))
                 }
                 
                 if showPortfolio {
-                    PortfolioCoinsList()
+                    PortfolioCoinsList(portfolioCoins: viewModel.portfolioCoins)
                         .transition(.move(edge: .trailing))
                 }
                 
                 Spacer()
             }
-//            .task {
-//                await viewModel.fetchCoins()
-//                await viewModel.fetchMarketData()
-//            }
+            .task {
+                await viewModel.fetchCoins()
+                await viewModel.fetchMarketData()
+            }
         }
     }
 }
@@ -123,25 +125,31 @@ private struct ListTitle: View {
 
 // MARK: All Coins List
 private struct AllCoinsList: View {
-    @EnvironmentObject private var viewModel: HomeViewModel
+    let allCoins: [Coin]
+    var fetchCoins: () async -> Void
     
     var body: some View {
         List {
-            ForEach(viewModel.filterdCoins(searchText: viewModel.searchText)) { coin in
+            ForEach(allCoins) { coin in
                 CoinRowView(coin: coin, showHoldingsColumn: false)
             }
         }
         .listStyle(PlainListStyle())
+        .refreshable {
+            Task {
+                await fetchCoins()
+            }
+        }
     }
 }
 
 // MARK: Portfolio Coins List
 private struct PortfolioCoinsList: View {
-    @EnvironmentObject private var viewModel: HomeViewModel
+    let portfolioCoins: [Coin]
     
     var body: some View {
         List {
-            ForEach(viewModel.porfolioCoins) { coin in
+            ForEach(portfolioCoins) { coin in
                 CoinRowView(coin: coin, showHoldingsColumn: true)
             }
         }

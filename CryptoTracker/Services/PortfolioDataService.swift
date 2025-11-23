@@ -59,7 +59,7 @@ class PortfolioDataService {
     private func add(coin: Coin, amount: Double) {
         let newEntity = PortfolioEntity(context: container.viewContext)
         newEntity.coinID = coin.id
-        newEntity.amount = coin.currentHoldings ?? 0
+        newEntity.amount = amount
         applyChanges()
     }
     

@@ -19,7 +19,7 @@ struct PortfolioView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     SearchBarView(searchText: $viewModel.searchText)
                     
-                    CoinLogoList(selectedCoin: $selectedCoin, allCoins: viewModel.filterdCoins(searchText: viewModel.searchText))
+                    CoinLogoList(selectedCoin: $selectedCoin, quantityText: $quantityText, portfolioCoins: viewModel.portfolioCoins, allCoins: viewModel.filterdCoins(searchText: viewModel.searchText), searchText: viewModel.searchText)
                     
                     if let coin = selectedCoin {
                         PortfolioInputSection(quantityText: $quantityText, selectedCoin: coin)
@@ -33,9 +33,12 @@ struct PortfolioView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     SaveButton(selectedCoin: $selectedCoin, showCheckmark: $showCheckmark, quantityText: $quantityText) {
-                        
+                        if let coin = selectedCoin,
+                           let amount = Double(quantityText) {
+                            viewModel.updatePortfolio(coin: coin, amount: amount)
+                        }
                     }
-                    .opacity(selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText) ? 1.0 : 0.0)
+                        .opacity(selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText) ? 1.0 : 0.0)
                 }
                 .sharedBackgroundVisibility(selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText) ? .visible : .hidden)
             }
@@ -57,18 +60,21 @@ struct PortfolioView: View {
 
 private struct CoinLogoList: View {
     @Binding var selectedCoin: Coin?
+    @Binding var quantityText: String
+    let portfolioCoins: [Coin]
     let allCoins: [Coin]
+    let searchText: String
     
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: 10) {
-                ForEach(allCoins) { coin in
+                ForEach(searchText.isEmpty ? portfolioCoins : allCoins) { coin in
                     CoinImageView(coin: coin)
                         .frame(width: 75)
                         .padding(5)
                         .onTapGesture {
                             withAnimation(.easeIn) {
-                                selectedCoin = coin
+                                updateSelectedCoin(coin: coin)
                             }
                         }
                         .background(
@@ -80,6 +86,17 @@ private struct CoinLogoList: View {
         }
         .padding(.vertical, 4)
         .padding(.leading)
+    }
+    
+    private func updateSelectedCoin(coin: Coin) {
+        selectedCoin = coin
+        
+        if let portfolioCoin = portfolioCoins.first(where: { $0.id == coin.id }),
+           let amount = portfolioCoin.currentHoldings {
+                quantityText = "\(amount)"
+        } else {
+            quantityText = ""
+        }
     }
 }
 
@@ -137,15 +154,15 @@ private struct PortfolioInputSection: View {
 }
 
 private struct SaveButton: View {
+    @Environment(\.dismiss) var dismiss
     @Binding var selectedCoin: Coin?
     @Binding var showCheckmark: Bool
     @Binding var quantityText: String
-    var saveData: () -> Void
+    var updatePortfolio: () -> Void
     
     var body: some View {
         Button {
             Task {
-                saveData()
                 await saveButtonPressed()
             }
         } label: {
@@ -161,7 +178,7 @@ private struct SaveButton: View {
     }
     
     func saveButtonPressed() async {
-        guard selectedCoin != nil else { return }
+        updatePortfolio()
         
         showCheckmark = true
         UIApplication.shared.endEditing()
@@ -170,6 +187,7 @@ private struct SaveButton: View {
         
         showCheckmark = false
         removeSelectedCoin()
+        dismiss()
     }
     
     func removeSelectedCoin() {

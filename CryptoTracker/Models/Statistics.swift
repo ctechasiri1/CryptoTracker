@@ -12,11 +12,13 @@ struct Statistics: Identifiable {
     let title: String
     let value: String
     let percentChange: Double?
+    let portfolioValue: Double?
     
-    init(title: String, value: String, percentChange: Double? = nil) {
+    init(title: String, value: String, percentChange: Double? = nil, portfolioValue: Double? = 0.0) {
         self.title = title
         self.value = value
         self.percentChange = percentChange
+        self.portfolioValue = portfolioValue
     }
 }
 
