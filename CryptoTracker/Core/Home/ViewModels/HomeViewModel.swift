@@ -29,13 +29,7 @@ class HomeViewModel: ObservableObject {
     func addSubsribers() {
         $allCoins
             .combineLatest(portfolioDataService.$savedEntities)
-            .map { (coins, portfolioEntities) -> [Coin] in
-                coins
-                    .compactMap { (coin) -> Coin? in
-                        guard let entity = portfolioEntities.first(where: { $0.coinID == coin.id }) else { return nil }
-                        return coin.updateHoldings(amount: entity.amount)
-                    }
-            }
+            .map(self.updatePortfolioHoldings)
             .sink { [weak self] returnedCoins in
                 self?.portfolioCoins = returnedCoins
             }
@@ -43,20 +37,7 @@ class HomeViewModel: ObservableObject {
         
         $portfolioCoins
             .combineLatest($marketData)
-            .map({ portfolioCoins, marketData -> [Statistics] in
-                let portfolioValue = portfolioCoins
-                                        .map({$0.currentHoldingsValue()})
-                                        .reduce(0, +)
-                
-                guard let data = marketData else { return [] }
-                
-                let marketCap = Statistics(title: "Market Cap", value: data.marketCap, percentChange: Double(data.marketCapPercentageInBTC))
-                let volume = Statistics(title: "24h Volume", value: data.volume)
-                let btcDominance = Statistics(title: "BTC Dominance", value: data.marketCapPercentageInBTC)
-                let portfolio = Statistics(title: "Porfolio Value", value: "\(portfolioValue.asCurrencyWith2Decimals())", percentChange: 0)
-                    
-                return [marketCap, volume, btcDominance, portfolio]
-            })
+            .map(self.updatePortfolioValue)
             .sink { [weak self] stats in
                 self?.statsList = stats
             }
@@ -98,5 +79,40 @@ class HomeViewModel: ObservableObject {
         let filteredCoins = allCoins.filter({ $0.name.localizedCaseInsensitiveContains(searchText) || $0.symbol.localizedCaseInsensitiveContains(searchText) || $0.id.localizedCaseInsensitiveContains(searchText) })
         
         return filteredCoins
+    }
+    
+    private func updatePortfolioValue(portfolioCoins: [Coin], marketData: MarketData?) -> [Statistics] {
+        let portfolioValue = portfolioCoins
+                                .map({$0.currentHoldingsValue()})
+                                .reduce(0, +)
+        
+        let previousValue = portfolioCoins
+                                .map { (coin) -> Double in
+                                    let currentValue = coin.currentHoldingsValue()
+                                    let precentageChanged = (coin.priceChangePercentage24H ?? 0) / 100
+                                    let previousValue = currentValue / (1 + precentageChanged)
+                                    
+                                    return previousValue
+                                }
+                                .reduce(0, +)
+        
+        let perecentageChange = ((portfolioValue - previousValue) / previousValue) * 100
+        
+        guard let data = marketData else { return [] }
+        
+        let marketCap = Statistics(title: "Market Cap", value: data.marketCap, percentChange: Double(data.marketCapPercentageInBTC))
+        let volume = Statistics(title: "24h Volume", value: data.volume)
+        let btcDominance = Statistics(title: "BTC Dominance", value: data.marketCapPercentageInBTC)
+        let portfolio = Statistics(title: "Porfolio Value", value: "\(portfolioValue.asCurrencyWith2Decimals())", percentChange: perecentageChange)
+            
+        return [marketCap, volume, btcDominance, portfolio]
+    }
+    
+    private func updatePortfolioHoldings(coins: [Coin], portfolioEntities: [PortfolioEntity]) -> [Coin] {
+        coins
+            .compactMap { (coin) -> Coin? in
+                guard let entity = portfolioEntities.first(where: { $0.coinID == coin.id }) else { return nil }
+                return coin.updateHoldings(amount: entity.amount)
+            }
     }
 }
