@@ -13,9 +13,10 @@ class HomeViewModel: ObservableObject {
     
     @Published var allCoins = [Coin]()
     @Published var portfolioCoins = [Coin]()
+    @Published var marketData: MarketData? = nil
     
     @Published var searchText: String = ""
-    
+
     private let coinDataService = CoinDataService()
     private let marketDataService = MarketDataService()
     private let portfolioDataService = PortfolioDataService()
@@ -25,7 +26,7 @@ class HomeViewModel: ObservableObject {
         addSubsribers()
     }
     
-    func addSubsribers() {        
+    func addSubsribers() {
         $allCoins
             .combineLatest(portfolioDataService.$savedEntities)
             .map { (coins, portfolioEntities) -> [Coin] in
@@ -37,6 +38,27 @@ class HomeViewModel: ObservableObject {
             }
             .sink { [weak self] returnedCoins in
                 self?.portfolioCoins = returnedCoins
+            }
+            .store(in: &cancellables)
+        
+        $portfolioCoins
+            .combineLatest($marketData)
+            .map({ portfolioCoins, marketData -> [Statistics] in
+                let portfolioValue = portfolioCoins
+                                        .map({$0.currentHoldingsValue()})
+                                        .reduce(0, +)
+                
+                guard let data = marketData else { return [] }
+                
+                let marketCap = Statistics(title: "Market Cap", value: data.marketCap, percentChange: Double(data.marketCapPercentageInBTC))
+                let volume = Statistics(title: "24h Volume", value: data.volume)
+                let btcDominance = Statistics(title: "BTC Dominance", value: data.marketCapPercentageInBTC)
+                let portfolio = Statistics(title: "Porfolio Value", value: "\(portfolioValue.asCurrencyWith2Decimals())", percentChange: 0)
+                    
+                return [marketCap, volume, btcDominance, portfolio]
+            })
+            .sink { [weak self] stats in
+                self?.statsList = stats
             }
             .store(in: &cancellables)
     }
@@ -59,14 +81,8 @@ class HomeViewModel: ObservableObject {
     func fetchMarketData() async {
         do {
             let marketData = try await marketDataService.getMarketDataFromURL()
-            
-            let marketCap = Statistics(title: "Market Cap", value: marketData.marketCap, percentChange: Double(marketData.marketCapPercentageInBTC))
-            let volume = Statistics(title: "24h Volume", value: marketData.volume)
-            let btcDominance = Statistics(title: "BTC Dominance", value: marketData.marketCapPercentageInBTC)
-            let portfolio = Statistics(title: "Porfolio Value", value: "$0.00", percentChange: 0)
-            
             await MainActor.run {
-                statsList.append(contentsOf: [marketCap, volume, btcDominance, portfolio])
+                self.marketData = marketData
             }
         } catch {
             print(error)
