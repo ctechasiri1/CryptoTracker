@@ -31,9 +31,9 @@ struct HomeView: View {
                 
                 if !showPortfolio {
                     AllCoinsList(allCoins: viewModel.filterdCoins(searchText: viewModel.searchText)) {
-                        await viewModel.fetchCoins()
+                        viewModel.fetchAllData()
                     }
-                        .transition(.move(edge: .leading))
+                    .transition(.move(edge: .leading))
                 }
                 
                 if showPortfolio {
@@ -126,7 +126,7 @@ private struct ListTitle: View {
 // MARK: All Coins List
 private struct AllCoinsList: View {
     let allCoins: [Coin]
-    var fetchCoins: () async -> Void
+    var reload: () -> Void
     
     var body: some View {
         List {
@@ -136,9 +136,7 @@ private struct AllCoinsList: View {
         }
         .listStyle(PlainListStyle())
         .refreshable {
-            Task {
-                await fetchCoins()
-            }
+            reload()
         }
     }
 }

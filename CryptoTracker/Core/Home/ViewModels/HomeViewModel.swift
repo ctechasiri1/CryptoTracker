@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import UIKit
 
 class HomeViewModel: ObservableObject {
     @Published var statsList = [Statistics]()
@@ -67,6 +68,14 @@ class HomeViewModel: ObservableObject {
             }
         } catch {
             print(error)
+        }
+    }
+    
+    func fetchAllData() {
+        Task {
+            await self.fetchCoins()
+            await self.fetchMarketData()
+            HapticManager.notification(type: .success)
         }
     }
     
