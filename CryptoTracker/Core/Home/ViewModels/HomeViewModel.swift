@@ -25,14 +25,7 @@ class HomeViewModel: ObservableObject {
         addSubsribers()
     }
     
-    func addSubsribers() {
-//        $portfolioCoins
-//            .sink { newPortfolioCoins in
-//                for coin in newPortfolioCoins {
-//                    
-//                }
-//            }
-        
+    func addSubsribers() {        
         $allCoins
             .combineLatest(portfolioDataService.$savedEntities)
             .map { (coins, portfolioEntities) -> [Coin] in
