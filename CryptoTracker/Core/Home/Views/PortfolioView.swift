@@ -28,11 +28,11 @@ struct PortfolioView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    XMarkButton()
+                    XMarkButton(searchText: $viewModel.searchText)
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    SaveButton(selectedCoin: $selectedCoin, showCheckmark: $showCheckmark, quantityText: $quantityText) {
+                    SaveButton(searchText: $viewModel.searchText, selectedCoin: $selectedCoin, showCheckmark: $showCheckmark, quantityText: $quantityText) {
                         if let coin = selectedCoin,
                            let amount = Double(quantityText) {
                             viewModel.updatePortfolio(coin: coin, amount: amount)
@@ -155,6 +155,7 @@ private struct PortfolioInputSection: View {
 
 private struct SaveButton: View {
     @Environment(\.dismiss) var dismiss
+    @Binding var searchText: String
     @Binding var selectedCoin: Coin?
     @Binding var showCheckmark: Bool
     @Binding var quantityText: String
@@ -191,6 +192,7 @@ private struct SaveButton: View {
     }
     
     func removeSelectedCoin() {
+        searchText = ""
         selectedCoin = nil
         quantityText = ""
     }

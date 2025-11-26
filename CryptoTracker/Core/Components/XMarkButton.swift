@@ -9,10 +9,12 @@ import SwiftUI
 
 struct XMarkButton: View {
     @Environment(\.presentationMode) var presentationMode
+    @Binding var searchText: String
     
     var body: some View {
         Button {
             presentationMode.wrappedValue.dismiss()
+            searchText = ""
         } label: {
             Image(systemName: "xmark")
                 .font(.headline)
@@ -21,5 +23,5 @@ struct XMarkButton: View {
 }
 
 #Preview {
-    XMarkButton()
+    XMarkButton(searchText: .constant("test"))
 }
