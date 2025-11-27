@@ -12,41 +12,51 @@ struct HomeView: View {
     @State private var showPortfolio: Bool = false
     @State private var showPortfolioSheet: Bool = false
     
+    @State private var showDetailView: Bool = false
+    @State private var selectedCoin: Coin? = nil
+    
     var body: some View {
-        ZStack {
-            Color.theme.background
-                .ignoresSafeArea()
-                .sheet(isPresented: $showPortfolioSheet) {
-                    PortfolioView()
-                }
-
-            VStack {
-                CustomNavigationHeader(showPorfolio: $showPortfolio, showPortfolioSheet: $showPortfolioSheet)
-                
-                HomeStatisticView(showPortfolio: $showPortfolio)
-                
-                SearchBarView(searchText: $viewModel.searchText)
-                
-                ListTitle(sortOption: $viewModel.sortOption, showPortfolio: $showPortfolio)
-                
-                if !showPortfolio {
-                    AllCoinsList(allCoins: viewModel.filterdCoins(searchText: viewModel.searchText)) {
-                        viewModel.fetchAllData()
+        NavigationStack {
+            ZStack {
+                Color.theme.background
+                    .ignoresSafeArea()
+                    .sheet(isPresented: $showPortfolioSheet) {
+                        PortfolioView()
                     }
-                    .transition(.move(edge: .leading))
-                }
                 
-                if showPortfolio {
-                    PortfolioCoinsList(portfolioCoins: viewModel.portfolioCoins)
-                        .transition(.move(edge: .trailing))
+                VStack {
+                    CustomNavigationHeader(showPorfolio: $showPortfolio, showPortfolioSheet: $showPortfolioSheet)
+                    
+                    HomeStatisticView(showPortfolio: $showPortfolio)
+                    
+                    SearchBarView(searchText: $viewModel.searchText)
+                    
+                    ListTitle(sortOption: $viewModel.sortOption, showPortfolio: $showPortfolio)
+                    
+                    if !showPortfolio {
+                        AllCoinsList(showDetailView: $showDetailView, selectedCoin: $selectedCoin, allCoins: viewModel.filterdCoins(searchText: viewModel.searchText)) {
+                            viewModel.fetchAllData()
+                        }
+                        .navigationDestination(isPresented: $showDetailView) {
+                            if let coin = selectedCoin {
+                                DetailView(coin: coin)
+                            }
+                        }
+                        .transition(.move(edge: .leading))
+                    }
+                    
+                    if showPortfolio {
+                        PortfolioCoinsList(showDetailsView: $showDetailView, portfolioCoins: viewModel.portfolioCoins)
+                            .transition(.move(edge: .trailing))
+                    }
+                    
+                    Spacer()
                 }
-                
-                Spacer()
             }
-            .task {
-                await viewModel.fetchCoins()
-                await viewModel.fetchMarketData()
-            }
+        }
+        .task {
+            await viewModel.fetchCoins()
+            await viewModel.fetchMarketData()
         }
     }
 }
@@ -153,13 +163,20 @@ private struct ListTitle: View {
 
 // MARK: All Coins List
 private struct AllCoinsList: View {
+    @Binding var showDetailView: Bool
+    @Binding var selectedCoin: Coin?
     let allCoins: [Coin]
     var reload: () -> Void
     
     var body: some View {
         List {
             ForEach(allCoins) { coin in
-                CoinRowView(coin: coin, showHoldingsColumn: false)
+                Button {
+                    showDetailView.toggle()
+                    selectedCoin = coin
+                } label: {
+                    CoinRowView(coin: coin, showHoldingsColumn: false)
+                }
             }
         }
         .listStyle(PlainListStyle())
@@ -171,6 +188,7 @@ private struct AllCoinsList: View {
 
 // MARK: Portfolio Coins List
 private struct PortfolioCoinsList: View {
+    @Binding var showDetailsView: Bool
     let portfolioCoins: [Coin]
     
     var body: some View {
