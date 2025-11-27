@@ -17,6 +17,7 @@ class HomeViewModel: ObservableObject {
     @Published var marketData: MarketData? = nil
     
     @Published var searchText: String = ""
+    @Published var sortOption: SortOptions = .rankAscending
 
     private let coinDataService = CoinDataService()
     private let marketDataService = MarketDataService()
@@ -28,6 +29,17 @@ class HomeViewModel: ObservableObject {
     }
     
     func addSubsribers() {
+        $sortOption
+            .map(self.sortCoins)
+            .sink { [weak self] sortedCoins in
+                if self?.sortOption == .holdingsAscending || self?.sortOption == .holdingsDescending {
+                    self?.portfolioCoins = sortedCoins
+                } else {
+                    self?.allCoins = sortedCoins
+                }
+            }
+            .store(in: &cancellables)
+        
         $allCoins
             .combineLatest(portfolioDataService.$savedEntities)
             .map(self.updatePortfolioHoldings)
@@ -88,6 +100,23 @@ class HomeViewModel: ObservableObject {
         let filteredCoins = allCoins.filter({ $0.name.localizedCaseInsensitiveContains(searchText) || $0.symbol.localizedCaseInsensitiveContains(searchText) || $0.id.localizedCaseInsensitiveContains(searchText) })
         
         return filteredCoins
+    }
+    
+    private func sortCoins(sortOption: SortOptions) -> [Coin] {
+        switch sortOption {
+        case .rankAscending:
+            return allCoins.sorted(by: {$0.rank() < $1.rank()})
+        case .rankDescending:
+            return allCoins.sorted(by: {$0.rank() > $1.rank()})
+        case .priceAscending:
+            return allCoins.sorted(by: {$0.currentPrice > $1.currentPrice})
+        case .priceDescending:
+            return allCoins.sorted(by: {$0.currentPrice < $1.currentPrice})
+        case .holdingsAscending:
+            return portfolioCoins.sorted(by: {$0.currentHoldingsValue() > $1.currentHoldingsValue()})
+        case .holdingsDescending:
+            return portfolioCoins.sorted(by: {$0.currentHoldingsValue() < $1.currentHoldingsValue()})
+        }
     }
     
     private func updatePortfolioValue(portfolioCoins: [Coin], marketData: MarketData?) -> [Statistics] {

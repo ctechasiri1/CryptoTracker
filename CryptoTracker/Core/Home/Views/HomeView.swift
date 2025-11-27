@@ -27,7 +27,7 @@ struct HomeView: View {
                 
                 SearchBarView(searchText: $viewModel.searchText)
                 
-                ListTitle(showPortfolio: $showPortfolio)
+                ListTitle(sortOption: $viewModel.sortOption, showPortfolio: $showPortfolio)
                 
                 if !showPortfolio {
                     AllCoinsList(allCoins: viewModel.filterdCoins(searchText: viewModel.searchText)) {
@@ -100,22 +100,50 @@ private struct CustomNavigationHeader: View {
 
 // MARK: List Title
 private struct ListTitle: View {
+    @Binding var sortOption: SortOptions
     @Binding var showPortfolio: Bool
     
     var body: some View {
         HStack {
-            Text("Coin")
+            Button {
+                sortOption = (sortOption == .rankAscending ? .rankDescending : .rankAscending)
+            } label: {
+                HStack {
+                    Text("Coin")
+                    Image(systemName: "chevron.down")
+                        .opacity((sortOption == .rankAscending || sortOption == .rankDescending) ? 1 : 0)
+                        .rotationEffect(sortOption == .rankAscending ? .degrees(0) : .degrees(180))
+                }
+            }
             
             Spacer()
             
             if showPortfolio {
-                Text("Holdings")
-                    .padding(.leading)
-                    .transition(.scale)
+                Button {
+                    sortOption = (sortOption == .holdingsAscending ? .holdingsDescending : .holdingsAscending)
+                } label: {
+                    HStack {
+                        Text("Holdings")
+                        Image(systemName: "chevron.down")
+                            .opacity((sortOption == .holdingsAscending || sortOption == .holdingsDescending) ? 1 : 0)
+                            .rotationEffect(sortOption == .holdingsAscending ? .degrees(0) : .degrees(180))
+                    }
+                    .frame(maxWidth: UIScreen.main.bounds.width / 3, alignment: .leading)
+                }
+                .transition(.scale)
             }
             
-            Text("Price")
-                .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
+            Button {
+                sortOption = (sortOption == .priceAscending ? .priceDescending : .priceAscending)
+            } label: {
+                HStack {
+                    Text("Price")
+                    Image(systemName: "chevron.down")
+                        .opacity((sortOption == .priceAscending || sortOption == .priceDescending) ? 1 : 0)
+                        .rotationEffect(sortOption == .priceAscending ? .degrees(0) : .degrees(180))
+                }
+                .frame(width: UIScreen.main.bounds.width / 4.5, alignment: .leading)
+            }
         }
         .padding(.horizontal)
         .foregroundStyle(Color.theme.secondaryText)
