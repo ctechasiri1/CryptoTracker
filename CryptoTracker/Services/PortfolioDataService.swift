@@ -9,7 +9,7 @@ import Combine
 import CoreData
 import Foundation
 
-class PortfolioDataService {
+final class PortfolioDataService {
     @Published var savedEntities = [PortfolioEntity]()
     
     private let container: NSPersistentContainer
