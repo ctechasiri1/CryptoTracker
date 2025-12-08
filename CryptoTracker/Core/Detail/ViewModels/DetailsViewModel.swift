@@ -9,6 +9,8 @@ import Combine
 import Foundation
 
 class DetailsViewModel: ObservableObject {
+    @Published var expandDescription: Bool = false
+    @Published var isLoading: Bool = false
     @Published var coinDetails: CoinDetails? = nil
     @Published var overviewStatistics: [Statistics] = []
     @Published var additionalStatistics: [Statistics] = []
@@ -16,6 +18,7 @@ class DetailsViewModel: ObservableObject {
     
     func fetchDetails(coin: Coin) async {
         do {
+            isLoading = true
             let loadedCoinDetails = try await coinDetailDataService.getCoinDetailsFromURL(coin: coin)
             await MainActor.run {
                 self.coinDetails = loadedCoinDetails
@@ -51,14 +54,8 @@ class DetailsViewModel: ObservableObject {
                 let marketCapChange = coin.marketCapChange24H?.formattedWithAbbreviations() ?? ""
                 let marketCapPercentChangeStat = Statistics(title: "24h Market Cap Change", value: marketCapChange, percentChange: marketCapPercentChange)
                 
-                let blockTime = loadedCoinDetails.blockTimeInMinutes ?? 0
-                let blockTimeString = blockTime == 0 ? "N/A" : "\(blockTime) min"
-                let blockTimeStat = Statistics(title: "Block Time", value: blockTimeString)
-                
-                let hashing = loadedCoinDetails.hashingAlgorithm ?? "N/A"
-                let hasingStat = Statistics(title: "Hashing Algorithm", value: hashing)
-                
-                self.additionalStatistics = [highStat, lowStat, priceChangeStat, marketCapPercentChangeStat, blockTimeStat, hasingStat]
+                self.additionalStatistics = [highStat, lowStat, priceChangeStat, marketCapPercentChangeStat]
+                self.isLoading = false
             }
         } catch {
             print(error)

@@ -14,15 +14,23 @@ struct DetailView: View {
     private let spacing: CGFloat = 30
     
     var body: some View {
-        ScrollView {
-            VStack {
-                StatsSection(coin: coin)
-                
-                ChartsView(coin: coin, priceCoordinates: coin.sparklineIn7D?.price ?? [])
-                
-                OverviewSection(spacing: spacing, columns: columns, overviewStatistics: viewModel.overviewStatistics)
-                
-                AddtionalDetailsSection(spacing: spacing, columns: columns, additionalDetailsStatistics: viewModel.additionalStatistics)
+        ZStack {
+            if viewModel.isLoading {
+                ProgressView {
+                    Text("Loading in coin details...")
+                }
+            }
+            
+            ScrollView {
+                VStack {
+                    StatsSection(coin: coin)
+                    
+                    ChartsView(coin: coin, priceCoordinates: coin.sparklineIn7D?.price ?? [])
+                    
+                    OverviewSection(expandDescription: $viewModel.expandDescription, spacing: spacing, columns: columns, description: viewModel.coinDetails?.description?.en ?? "", overviewStatistics: viewModel.overviewStatistics)
+                    
+                    AddtionalDetailsSection(spacing: spacing, columns: columns, additionalDetailsStatistics: viewModel.additionalStatistics)
+                }
             }
         }
         .navigationTitle(coin.name)
@@ -31,7 +39,7 @@ struct DetailView: View {
         }
         .toolbar {
             ToolbarItem {
-                ToolBarItem(coin: coin)
+                ToolBarItem(websiteLink: viewModel.coinDetails?.links?.homepage?.first ?? "", coin: coin)
             }
         }
     }
@@ -63,26 +71,34 @@ struct StatsSection: View {
 }
 
 struct ToolBarItem: View {
+    let websiteLink: String
     let coin: Coin
     
     var body: some View  {
         HStack {
-            CachedAsyncImage(url: URL(string:coin.image)!) { image in
-                image.resizable()
-            } placeholder: {
-                ProgressView()
+            if let url = URL(string: websiteLink) {
+                Link(destination: url) {
+                    CachedAsyncImage(url: URL(string:coin.image)!) { image in
+                        image.resizable()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(width: 30, height: 30)
+                    
+                    Text(coin.symbol.uppercased())
+                        .foregroundStyle(Color.blue)
+                }
             }
-            .frame(width: 30, height: 30)
-                
-            Text(coin.symbol.uppercased())
         }
         .padding()
     }
 }
 
 struct OverviewSection: View {
+    @Binding var expandDescription: Bool
     let spacing: CGFloat
     let columns: [GridItem]
+    let description: String
     let overviewStatistics: [Statistics]
     
     var body: some View {
@@ -94,6 +110,26 @@ struct OverviewSection: View {
         
         Divider()
         
+        VStack(spacing: 5) {
+            Text(description)
+                .foregroundStyle(Color.theme.secondaryText)
+                .font(.system(.caption, weight: .regular))
+                .lineLimit(expandDescription ? nil : 3)
+                .padding([.horizontal, .top])
+            
+            Button {
+                withAnimation(.smooth) {
+                    expandDescription.toggle()
+                }
+            } label: {
+                Text(expandDescription ? "Read Less" : "Read More")
+                    .foregroundStyle(Color.blue)
+                    .font(.system(.caption, weight: .bold))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding([.horizontal, .bottom])
+        }
+
         LazyVGrid(columns: columns, alignment: .leading, spacing: spacing) {
             ForEach(overviewStatistics) { stat in
                 StatisticView(stat: stat)
