@@ -15,9 +15,10 @@ struct DetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
-                Text("")
-                    .frame(height: 100)
+            VStack {
+                StatsSection(coin: coin)
+                
+                ChartsView(coin: coin, priceCoordinates: coin.sparklineIn7D?.price ?? [])
                 
                 OverviewSection(spacing: spacing, columns: columns, overviewStatistics: viewModel.overviewStatistics)
                 
@@ -28,11 +29,55 @@ struct DetailView: View {
         .task {
             await viewModel.fetchDetails(coin: coin)
         }
+        .toolbar {
+            ToolbarItem {
+                ToolBarItem(coin: coin)
+            }
+        }
     }
 }
 
 #Preview {
     DetailView(coin: Coin.mockCoin)
+}
+
+struct StatsSection: View {
+    let coin: Coin
+    
+    var body: some View {
+        VStack(spacing: 5) {
+            Text(coin.currentPrice.asCurrencyWith2Decimals())
+                .font(.system(.title, weight: .bold))
+            
+            HStack {
+                Image(systemName: "triangle.fill")
+                    .rotationEffect(coin.priceChangePercentage24H ?? 0 > 0 ? .zero : .degrees(180))
+                
+                Text(coin.priceChangePercentage24H?.asPercentString() ?? "0.00%")
+
+            }
+            .font(.system(.caption, weight: .bold))
+            .foregroundStyle(coin.priceChangePercentage24H ?? 0 > 0 ? Color.theme.green : Color.theme.red)
+        }
+    }
+}
+
+struct ToolBarItem: View {
+    let coin: Coin
+    
+    var body: some View  {
+        HStack {
+            CachedAsyncImage(url: URL(string:coin.image)!) { image in
+                image.resizable()
+            } placeholder: {
+                ProgressView()
+            }
+            .frame(width: 30, height: 30)
+                
+            Text(coin.symbol.uppercased())
+        }
+        .padding()
+    }
 }
 
 struct OverviewSection: View {
