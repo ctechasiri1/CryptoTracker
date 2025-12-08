@@ -1,29 +1,39 @@
 # CryptoTracker
 
-**CryptoTracker** is a native iOS application built with Swift that allows users to track real-time cryptocurrency prices and market trends.
+**CryptoTracker** is a native iOS application built with Swift that allows users to track real-time cryptocurrency prices, view detailed market charts, and manage a personal portfolio.
+
+<p align="center">
+  <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-07 at 23.03.10.jpg" alt="Live Prices" width="280"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-07 at 23.03.46.jpg" alt="Coin Detail View" width="280"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-07 at 23.03.27.jpg" alt="Edit Portfolio" width="280"/>
+</p>
 
 ## 🚀 Features
 
-* **Live Price Tracking**: Monitor real-time prices for popular cryptocurrencies.
-* **Market Data**: View key details such as daily price changes, market cap, and volume.
-* **Search**: Quickly find specific coins to add to your tracking list.
-* **Native iOS UI**: A clean and responsive user interface built for iOS devices.
+* **Live Price Tracking**: Monitor real-time prices for popular cryptocurrencies like Bitcoin, Ethereum, and BNB.
+* **Interactive Charts**: Visualize price trends with detailed historical charts (e.g., 24h, 7d).
+* **Portfolio Management**: Add coins to your portfolio to track your current holdings and total value.
+* **Market Insights**: View key metrics such as Market Cap, 24h Volume, and BTC Dominance.
+* **Search Functionality**: Quickly search for specific coins by name or symbol.
 
 ## 🛠 Tech Stack
 
 * **Language**: [Swift](https://developer.apple.com/swift/)
-* **Platform**: iOS
+* **Framework**: SwiftUI (inferred from UI style)
+* **Platform**: iOS 15.0+
 * **IDE**: [Xcode](https://developer.apple.com/xcode/)
-* **Testing**: XCTest (includes Unit Tests and UI Tests)
+* **Architecture**: MVVM (Model-View-ViewModel) recommended
 
 ## 🏁 Getting Started
 
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+Follow these instructions to get a copy of the project up and running on your local machine.
 
 ### Prerequisites
 
 * A Mac running the latest version of macOS.
-* **Xcode** (13.0 or later recommended).
+* **Xcode** (13.0 or later).
 * An iOS device or Simulator.
 
 ### Installation
@@ -41,16 +51,8 @@ Follow these instructions to get a copy of the project up and running on your lo
     ```
 
 3.  **Build and Run**
-    * Select your target Simulator (e.g., iPhone 15) or a connected physical device in the Xcode toolbar.
-    * Press `Cmd + R` or click the **Play** button to build and run the app.
-
-## 🧪 Running Tests
-
-This project includes a suite of unit and UI tests to ensure reliability.
-
-1.  Open the project in Xcode.
-2.  Press `Cmd + U` to execute the test suite.
-3.  View the results in the **Test Navigator** (Cmd + 6).
+    * Select your target Simulator (e.g., iPhone 17 Pro) in the Xcode toolbar.
+    * Press `Cmd + R` to build and run the app.
 
 ## 📂 Project Structure
 
@@ -61,7 +63,7 @@ This project includes a suite of unit and UI tests to ensure reliability.
 
 ## 🤝 Contributing
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are welcome! Please follow these steps:
 
 1.  Fork the Project
 2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
