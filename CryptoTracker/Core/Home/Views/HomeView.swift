@@ -11,6 +11,7 @@ struct HomeView: View {
     @EnvironmentObject private var viewModel: HomeViewModel
     @State private var showPortfolio: Bool = false
     @State private var showPortfolioSheet: Bool = false
+    @State private var showSettingsSheet: Bool = false
     
     @State private var showDetailView: Bool = false
     @State private var selectedCoin: Coin? = nil
@@ -23,9 +24,12 @@ struct HomeView: View {
                     .sheet(isPresented: $showPortfolioSheet) {
                         PortfolioView()
                     }
+                    .sheet(isPresented: $showSettingsSheet) {
+                        SettingsView()
+                    }
                 
                 VStack {
-                    CustomNavigationHeader(showPorfolio: $showPortfolio, showPortfolioSheet: $showPortfolioSheet)
+                    CustomNavigationHeader(showPorfolio: $showPortfolio, showPortfolioSheet: $showPortfolioSheet, showSettingsSheet: $showSettingsSheet)
                     
                     HomeStatisticView(showPortfolio: $showPortfolio)
                     
@@ -73,12 +77,15 @@ struct HomeView: View {
 private struct CustomNavigationHeader: View {
     @Binding var showPorfolio: Bool
     @Binding var showPortfolioSheet: Bool
+    @Binding var showSettingsSheet: Bool
     
     var body: some View {
         HStack {
             Button {
                 if showPorfolio {
                     showPortfolioSheet.toggle()
+                } else {
+                    showSettingsSheet.toggle()
                 }
             } label: {
                 CircleButtonView(imageName: showPorfolio ? "plus" : "info")
