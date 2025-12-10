@@ -12,7 +12,6 @@
   <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-09 at 17.28.46.jpg" alt="Edit Portfolio" width="210"/>
 </p>
 
-
 ## 🚀 Features
 
 * **Live Price Tracking**: Monitor real-time prices for popular cryptocurrencies like Bitcoin, Ethereum, and BNB.
