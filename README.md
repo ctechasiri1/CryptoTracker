@@ -3,13 +3,13 @@
 **CryptoTracker** is a native iOS application built with Swift that allows users to track real-time cryptocurrency prices, view detailed market charts, and manage a personal portfolio.
 
 <p align="center">
-  <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-09 at 17.28.07.png" alt="Loading Screen" width="210"/>
+  <img src="Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202025-12-09%20at%2017.28.07.png" alt="Loading Screen" width="210"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-09 at 17.28.17.jpg" alt="Live Prices" width="210"/>
+  <img src="Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202025-12-09%20at%2017.28.17.jpg" alt="Live Prices" width="210"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-09 at 17.28.34.jpg" alt="Bitcoin Detail" width="210"/>
+  <img src="Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202025-12-09%20at%2017.28.34.jpg" alt="Bitcoin Detail" width="210"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-09 at 17.28.46.jpg" alt="Edit Portfolio" width="210"/>
+  <img src="Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202025-12-09%20at%2017.28.46.jpg" alt="Edit Portfolio" width="210"/>
 </p>
 
 ## 🚀 Features
