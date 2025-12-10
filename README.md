@@ -5,13 +5,12 @@
 <p align="center">
   <img src="https://github.com/user-attachments/assets/90bb5d3e-d60b-497e-85b7-d2ce68a6fd91" alt="Loading Screen" width="210"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202025-12-09%20at%2017.28.17.jpg" alt="Live Prices" width="210"/>
+  <img src="https://github.com/user-attachments/assets/88fa0615-e060-402c-ab1a-90aa93001718" alt="Live Prices" width="210"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202025-12-09%20at%2017.28.34.jpg" alt="Bitcoin Detail" width="210"/>
+  <img src="https://github.com/user-attachments/assets/7cc8d958-80f7-440d-96da-bfbed9736168" alt="Bitcoin Detail" width="210"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202025-12-09%20at%2017.28.46.jpg" alt="Edit Portfolio" width="210"/>
+  <img src="https://github.com/user-attachments/assets/bd8dc29d-d6a6-4a68-a4bd-460eb5febe45" alt="Edit Portfolio" width="210"/>
 </p>
-
 
 ## 🚀 Features
 
