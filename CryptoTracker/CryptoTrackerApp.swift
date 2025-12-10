@@ -10,14 +10,25 @@ import SwiftUI
 @main
 struct CryptoTrackerApp: App {
     @StateObject private var viewModel = HomeViewModel()
+    @State private var showLaunchView: Bool = true
     
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                HomeView()
-                    .toolbar(.hidden, for: .navigationBar)
+            ZStack {
+                NavigationView {
+                    HomeView()
+                        .toolbar(.hidden, for: .navigationBar)
+                }
+                .environmentObject(viewModel)
+                
+                ZStack {
+                    if showLaunchView {
+                        LaunchView(showLaunchView: $showLaunchView)
+                            .transition(.move(edge: .leading))
+                    }
+                }
+                .zIndex(2.0)
             }
-            .environmentObject(viewModel)
         }
     }
 }

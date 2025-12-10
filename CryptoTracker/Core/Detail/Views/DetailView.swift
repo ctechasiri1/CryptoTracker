@@ -15,12 +15,6 @@ struct DetailView: View {
     
     var body: some View {
         ZStack {
-            if viewModel.isLoading {
-                ProgressView {
-                    Text("Loading in coin details...")
-                }
-            }
-            
             ScrollView {
                 VStack {
                     StatsSection(coin: coin)
@@ -31,6 +25,10 @@ struct DetailView: View {
                     
                     AddtionalDetailsSection(spacing: spacing, columns: columns, additionalDetailsStatistics: viewModel.additionalStatistics)
                 }
+            }
+            if viewModel.isLoading {
+                LoadingView(showLoadingView: $viewModel.isLoading)
+                    .transition(.opacity.animation(.easeInOut(duration: 0.3)))
             }
         }
         .navigationTitle(coin.name)

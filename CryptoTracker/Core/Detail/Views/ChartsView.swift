@@ -33,8 +33,8 @@ struct ChartsView: View {
         }
         .onAppear {
                 for (index, dataPoint) in priceCoordinates.enumerated() {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.03) { // 0.2 second delay per point
-                        withAnimation(.easeOut(duration: 0.05)) { // Animate the addition
+                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.02) { // 0.2 second delay per point
+                        withAnimation(.easeOut(duration: 0.04)) { // Animate the addition
                             visibleData.append(dataPoint)
                         }
                     }
