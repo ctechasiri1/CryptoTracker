@@ -10,7 +10,6 @@ import Foundation
 
 class DetailsViewModel: ObservableObject {
     @Published var expandDescription: Bool = false
-    @Published var isLoading: Bool = false
     @Published var coinDetails: CoinDetails? = nil
     @Published var overviewStatistics: [Statistics] = []
     @Published var additionalStatistics: [Statistics] = []
@@ -18,7 +17,6 @@ class DetailsViewModel: ObservableObject {
     
     func fetchDetails(coin: Coin) async {
         do {
-            isLoading = true
             let loadedCoinDetails = try await coinDetailDataService.getCoinDetailsFromURL(coin: coin)
             await MainActor.run {
                 self.coinDetails = loadedCoinDetails
@@ -55,7 +53,6 @@ class DetailsViewModel: ObservableObject {
                 let marketCapPercentChangeStat = Statistics(title: "24h Market Cap Change", value: marketCapChange, percentChange: marketCapPercentChange)
                 
                 self.additionalStatistics = [highStat, lowStat, priceChangeStat, marketCapPercentChangeStat]
-                self.isLoading = false
             }
         } catch {
             print(error)

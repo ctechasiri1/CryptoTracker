@@ -20,6 +20,7 @@ struct CryptoTrackerApp: App {
                         .toolbar(.hidden, for: .navigationBar)
                 }
                 .environmentObject(viewModel)
+                .navigationViewStyle(StackNavigationViewStyle())
                 
                 ZStack {
                     if showLaunchView {

@@ -26,6 +26,7 @@ struct PortfolioView: View {
                     }
                 }
             }
+            .background(Color.theme.background.ignoresSafeArea())
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     XMarkButton(searchText: $viewModel.searchText)

@@ -50,10 +50,19 @@ struct HomeView: View {
                     }
                     
                     if showPortfolio {
-                        PortfolioCoinsList(showDetailsView: $showDetailView, portfolioCoins: viewModel.portfolioCoins)
-                            .transition(.move(edge: .trailing))
+                        ZStack(alignment: .center) {
+                            if viewModel.portfolioCoins.isEmpty && viewModel.searchText.isEmpty {
+                                Text("Click the (+) button to add some coins")
+                                    .multilineTextAlignment(.center)
+                                    .foregroundStyle(Color.theme.secondaryText)
+                                    .font(.system(.callout, weight: .medium))
+                                    .padding(50)
+                            } else {
+                                PortfolioCoinsList(showDetailsView: $showDetailView, portfolioCoins: viewModel.portfolioCoins)
+                            }
+                        }
+                        .transition(.move(edge: .trailing))
                     }
-                    
                     Spacer()
                 }
             }
@@ -184,6 +193,7 @@ private struct AllCoinsList: View {
                 } label: {
                     CoinRowView(coin: coin, showHoldingsColumn: false)
                 }
+                .listRowBackground(Color.theme.background)
             }
         }
         .listStyle(PlainListStyle())
@@ -202,6 +212,7 @@ private struct PortfolioCoinsList: View {
         List {
             ForEach(portfolioCoins) { coin in
                 CoinRowView(coin: coin, showHoldingsColumn: true)
+                    .listRowBackground(Color.theme.background)
             }
         }
         .listStyle(PlainListStyle())

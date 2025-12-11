@@ -138,7 +138,7 @@ class HomeViewModel: ObservableObject {
         
         guard let data = marketData else { return [] }
         
-        let marketCap = Statistics(title: "Market Cap", value: data.marketCap, percentChange: Double(data.marketCapPercentageInBTC))
+        let marketCap = Statistics(title: "Market Cap", value: data.marketCap, percentChange: data.marketCapChangePercentage24HUsd)
         let volume = Statistics(title: "24h Volume", value: data.volume)
         let btcDominance = Statistics(title: "BTC Dominance", value: data.marketCapPercentageInBTC)
         let portfolio = Statistics(title: "Porfolio Value", value: "\(portfolioValue.asCurrencyWith2Decimals())", percentChange: perecentageChange)

@@ -31,7 +31,7 @@ struct StatisticView: View {
                     .font(.system(.caption, weight: .bold))
             }
             .foregroundStyle((stat.percentChange ?? 0) >= 0 ? Color.theme.green : Color.theme.red)
-            .opacity(stat.percentChange == nil ? 0 : 1)
+            .opacity(stat.percentChange == nil || stat.percentChange?.isNaN == true ? 0 : 1)
         }
     }
 }

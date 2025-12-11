@@ -51,7 +51,6 @@ struct ChartsView: View {
             }
         }
         .chartYScale(domain: minPrice...maxPrice)
-        
         .frame(height: 200)
         .padding()
         

@@ -15,6 +15,8 @@ struct DetailView: View {
     
     var body: some View {
         ZStack {
+            Color.theme.background
+                .ignoresSafeArea()
             ScrollView {
                 VStack {
                     StatsSection(coin: coin)
@@ -26,8 +28,8 @@ struct DetailView: View {
                     AddtionalDetailsSection(spacing: spacing, columns: columns, additionalDetailsStatistics: viewModel.additionalStatistics)
                 }
             }
-            if viewModel.isLoading {
-                LoadingView(showLoadingView: $viewModel.isLoading)
+            if viewModel.coinDetails == nil {
+                LoadingView()
                     .transition(.opacity.animation(.easeInOut(duration: 0.3)))
             }
         }
